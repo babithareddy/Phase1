@@ -12,7 +12,7 @@ import android.widget.EditText;
 import android.app.Activity;
 
 
-public class SubmitPage extends Activity {
+public class SubmitPage extends ActionBarActivity {
 
     private Button Submit;
     private Button Previous;
@@ -53,7 +53,15 @@ public class SubmitPage extends Activity {
 
         });
     }
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        setTitle("Registration(3)");
 
+
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        return true;
+    }
 
 
 

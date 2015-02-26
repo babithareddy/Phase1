@@ -18,8 +18,9 @@ public class DB extends SQLiteOpenHelper {
     // Database Name
     private static final String DATABASE_NAME = "RegistrationDB";
     private static final String[] COLUMNS_pswd = {"password"};
+    private static final String[] COLUMNS_mobiles = {"mobilenum1","mobilenum2","mobilenum3","mobilenum4"};
     public DB(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+       super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
@@ -27,7 +28,7 @@ public class DB extends SQLiteOpenHelper {
         // SQL statement to create  table
 
         String CREATE_TABLE_USER = "CREATE TABLE if not exists userInfo (mobilenum TEXT, password TEXT, firstname TEXT, lastname TEXT, emailid TEXT, address1 TEXT,address2 TEXT, city TEXT, state TEXT, country TEXT)";
-        String CREATE_TABLE_MOBILE = "CREATE TABLE if not exists frnsMobiles (mobilenum1 TEXT, mobilenum2 TEXT, mobilenum3 TEXT, mobilenum4 TEXT)";
+        String CREATE_TABLE_MOBILE = "CREATE TABLE if not exists frnsMobile (usermobile TEXT,mobilenum1 TEXT, mobilenum2 TEXT, mobilenum3 TEXT, mobilenum4 TEXT)";
 
         // create table
         db.execSQL(CREATE_TABLE_USER);
@@ -72,15 +73,16 @@ public class DB extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void addPhnum(mobilenumbersObj mobilenumbersObj){
+    public void addPhnum(mobilenumbersObj mobilenumbersObj,String mobilenum){
         //for logging
 
         // 1. get reference to writable DB
         SQLiteDatabase db = this.getWritableDatabase();
-
+        db.execSQL("DROP TABLE IF EXISTS frnsMobile");
         // 2. create ContentValues to add key "column"/value
-
+this.onCreate(db);
         ContentValues values = new ContentValues();
+        values.put("usermobile",mobilenum);
         values.put("mobilenum1",mobilenumbersObj.mobilenum1);
         values.put("mobilenum2",mobilenumbersObj.mobilenum2);
         values.put("mobilenum3",mobilenumbersObj.mobilenum3);
@@ -88,7 +90,7 @@ public class DB extends SQLiteOpenHelper {
 try {
 this.onCreate(db);
     // 3. insert
-    db.insert("frnsMobiles", // table
+    db.insert("frnsMobile", // table
             null, //nullColumnHack
             values); // key/value -> keys = column names/ values = column values
 
@@ -128,5 +130,26 @@ catch(Exception e)
     }
 
 
+    public mobilenumbersObj getMobilenum(String mob){
 
+        // 1. get reference to readable DB
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // 2. build query
+        Cursor cursor =
+                db.query("frnsMobile", // a. table
+                        COLUMNS_mobiles, // b. column names
+                        " usermobile = ?", // c. selections
+                        new String[] { String.valueOf(mob) }, // d. selections args
+                        null, // e. group by
+                        null, // f. having
+                        null, // g. order by
+                        null); // h. limit
+
+        // 3. if we got results get the first one
+        if (cursor != null)
+            cursor.moveToFirst();
+        mobilenumbersObj mobilenumbersObj=new mobilenumbersObj(cursor.getString(1),cursor.getString(2),cursor.getString(3),cursor.getString(4));
+        return (mobilenumbersObj);
+    }
 }

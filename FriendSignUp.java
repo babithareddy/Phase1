@@ -3,6 +3,7 @@ package com.example.hp.phase1;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds;
@@ -25,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class FriendSignUp extends Activity {
+public class FriendSignUp extends ActionBarActivity {
     private Button addContactsBtn;
     private Button submitBtn;
     private static final int REQUEST_SELECT_CONTACT = 1;
@@ -61,6 +62,17 @@ public class FriendSignUp extends Activity {
 
         submitBtn = (Button) findViewById(R.id.submit);
         submitBtn.setVisibility(View.INVISIBLE);
+        submitBtn.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View view) {
+                SharedPreferences prefs = getPreferences(MODE_PRIVATE);
+                String mobilenum=prefs.getString("userid","5187635916");
+                mobilenumbersObj  mobilenumbersObj= new mobilenumbersObj(dbmobilenm[0],dbmobilenm[1],dbmobilenm[2],dbmobilenm[3]);
+                db.addPhnum(mobilenumbersObj,mobilenum);
+                Intent intent = new Intent(context,helpactivity.class);
+                startActivity(intent);
+            }
+        });
 
 
     }
@@ -120,22 +132,11 @@ public class FriendSignUp extends Activity {
 
         }
 
-        submitBtn.setOnClickListener(new View.OnClickListener() {
 
-            public void onClick(View view) {
-                mobilenumbersObj  mobilenumbersObj= new mobilenumbersObj(dbmobilenm[0],dbmobilenm[1],dbmobilenm[2],dbmobilenm[3]);
-                db.addPhnum(mobilenumbersObj);
 
-            }
-        });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_friend_sign_up, menu);
-        return true;
-    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -150,6 +151,15 @@ public class FriendSignUp extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        setTitle("Login Details");
+
+
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        return true;
     }
 }
 

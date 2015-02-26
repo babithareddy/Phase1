@@ -4,13 +4,15 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 
 
-public class SignUpPage extends Activity {
+public class SignUpPage extends ActionBarActivity {
 
     private Button Next;
     private Button Previous;
@@ -80,7 +82,15 @@ public class SignUpPage extends Activity {
 
         });
     }
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        setTitle("Registration(1)");
 
+
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        return true;
+    }
 
     }
 
